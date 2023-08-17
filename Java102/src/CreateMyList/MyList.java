@@ -35,9 +35,43 @@ public class MyList<T> {
     @SuppressWarnings("unchecked")
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
+            return null;
         }
         return (T) data[index];
+    }
+
+    @SuppressWarnings("unchecked")
+    public T remove(int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        T removedElement = (T) data[index];
+        System.arraycopy(data, index + 1, data, index, size - index - 1);
+        data[size - 1] = null;
+        size--;
+        return removedElement;
+    }
+
+    public T set(int index, T element) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        T oldElement = get(index);
+        data[index] = element;
+        return oldElement;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            result.append(data[i]);
+            if (i < size - 1) {
+                result.append(", ");
+            }
+        }
+        result.append("]");
+        return result.toString();
     }
 
     private void expandArray() {
@@ -49,13 +83,17 @@ public class MyList<T> {
     }
 
     public static void main(String[] args) {
-        MyList<Integer> integerList = new MyList<>();
-        integerList.add(10);
-        integerList.add(20);
-        integerList.add(30);
+        MyList<String> myList = new MyList<>();
+        myList.add("Apple");
+        myList.add("Banana");
+        myList.add("Cherry");
 
-        System.out.println("Size: " + integerList.size());
-        System.out.println("Capacity: " + integerList.getCapacity());
-        System.out.println("Element at index 1: " + integerList.get(1));
+        System.out.println("Original List: " + myList);
+        myList.remove(1);
+        System.out.println("List After Removing Banana: " + myList);
+
+        myList.set(0, "Orange");
+        System.out.println("List After Setting Orange: " + myList);
     }
 }
+
